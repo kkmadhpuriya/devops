@@ -29,10 +29,6 @@ jobs:
       node_version: "18"
       build_env: "prod"
       domain_with_path: false
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_BASE_URL: ${{ secrets.DOCKER_BASE_URL }}
 ```
 
 ## Inputs Configuration
@@ -47,16 +43,8 @@ jobs:
 | `domain_with_path` | If the domain includes a path prefix matching the project directory |    No    | `false` |
 | `build_args`       | Additional raw build arguments for Docker                           |    No    | `""`    |
 
-## Required Secrets
-
-Make sure to set these in your Organization or Repository settings:
-
-- `DOCKER_USERNAME`: Your container registry username
-- `DOCKER_PASSWORD`: Your container registry password
-- `DOCKER_BASE_URL`: Base URL of your private docker registry.
-
 _Note on Docker Image Names:_ The docker image tag is automatically generated in the format:
-`{{ secrets.DOCKER_BASE_URL }}/github_org/github_repo-project_path-branch:latest`
+`registry.k303.hostingbeta.com/github_org/github_repo-project_path-branch:latest`
 
 ## Pipeline Lifecycle
 

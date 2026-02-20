@@ -34,17 +34,10 @@ on:
         description: "Additional docker build arguments"
         required: false
         type: string
-    secrets:
-      DOCKER_USERNAME:
-        required: true
-      DOCKER_PASSWORD:
-        required: true
-      DOCKER_BASE_URL:
-        required: true
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -66,17 +59,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ secrets.DOCKER_BASE_URL }}
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Generate Docker Tag Name
         id: generate-tag
         run: |
-          # The format requested is: {{ secrets.DOCKER_BASE_URL }}/ORG/REPONAME-project_path-branch:latest
+          # The format requested is: registry.k303.hostingbeta.com/ORG/REPONAME-project_path-branch:latest
           # github.repository is in the format ORG/REPONAME
           REPO=${{ github.repository }}
           # github.ref_name contains the branch name
@@ -85,7 +71,7 @@ jobs:
 
           # Replace slashes or special characters in branch or project path if needed, to keep typical tag formats clean
           # This creates something like 'ORG/REPO-frontend-main'
-          IMAGE_TAG="${{ secrets.DOCKER_BASE_URL }}/${REPO}-${PROJECT}-${BRANCH}"
+          IMAGE_TAG="registry.k303.hostingbeta.com/${REPO}-${PROJECT}-${BRANCH}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
 
       - name: Build and Push Docker Image
