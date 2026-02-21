@@ -60,8 +60,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           driver: kubernetes
-          endpoint: kubernetes
-          install: true
+          use: true
 
       - name: Generate Docker Tag Name
         id: generate-tag
